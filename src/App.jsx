@@ -31,8 +31,10 @@ class BooksApp extends React.Component {
 
   updateShelf = (shelf, id) => {
     this.setState((state) => ({
-      books: state.books.map((book) => book.id === id ? Object.assign({}, book, { shelf }) : book),
+      books: state.books.map(book => book.id === id ? Object.assign({}, book, { shelf }) : book),
     }));
+    const bookToUpdate = this.state.books.find(book => book.id === id);
+    BooksAPI.update(bookToUpdate, shelf);
   }
 
   updateQuery = (query) => {
