@@ -13,6 +13,20 @@ class BooksApp extends React.Component {
         author: 'Harper Lee',
         shelf: 'currentlyReading',
         cover: 'http://books.google.com/books/content?id=PGR2AwAAQBAJ&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE73-GnPVEyb7MOCxDzOYF1PTQRuf6nCss9LMNOSWBpxBrz8Pm2_mFtWMMg_Y1dx92HT7cUoQBeSWjs3oEztBVhUeDFQX6-tWlWz1-feexS0mlJPjotcwFqAg6hBYDXuK_bkyHD-y&source=gbs_api',
+      },
+    ],
+    shelves: [
+      {
+        id: 'currentlyReading',
+        name: 'Currently Reading',
+      },
+      {
+        id: 'wantToRead',
+        name: 'Want To Read',
+      },
+      {
+        id: 'read',
+        name: 'Read',
       }
     ],
     showSearchPage: false
@@ -41,13 +55,14 @@ class BooksApp extends React.Component {
           </div>
         ) : (
           <div className="list-books">
-            <Header />
+            <Header title='MyReads'/>
             <div className="list-books-content">
               <div>
-                <BookShelf shelfType='Currently Reading'>
+                {this.state.shelves.map((shelf) => (
+                  <BookShelf key={shelf.id} shelfType={shelf.name}>
                     <ol className="books-grid">
                       {this.state.books && this.state.books
-                        .filter((book) => book.shelf === 'currentlyReading')
+                        .filter((book) => book.shelf === shelf.id)
                         .map((book, index) => (
                           <li key={index}>
                             <Book
@@ -62,43 +77,8 @@ class BooksApp extends React.Component {
                         ))
                       }
                     </ol>
-                </BookShelf>
-                <BookShelf shelfType='Want To Read'>
-                    <ol className="books-grid">
-                      {this.state.books
-                        .filter((book) => book.shelf === 'wantToRead')
-                        .map((book, index) => (
-                          <li key={index}>
-                            <Book
-                              title={book.title}
-                              author={book.author}
-                              shelf={book.shelf}
-                              bookCover={book.cover}
-                              onShelfChange={this.updateShelf}
-                            />
-                          </li>
-                        ))
-                      }
-                    </ol>
-                </BookShelf>
-                <BookShelf shelfType='Read'>
-                    <ol className="books-grid">
-                      {this.state.books
-                        .filter((book) => book.shelf === 'read')
-                        .map((book, index) => (
-                          <li key={index}>
-                            <Book
-                              title={book.title}
-                              author={book.author}
-                              shelf={book.shelf}
-                              bookCover={book.cover}
-                              onShelfChange={this.updateShelf}
-                            />
-                          </li>
-                        ))
-                      }
-                    </ol>
-                </BookShelf>
+                  </BookShelf>
+                ))}
               </div>
             </div>
             <div className="open-search">
