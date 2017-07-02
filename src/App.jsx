@@ -2,6 +2,8 @@ import React from 'react';
 import Book from './book';
 import BookShelf from './bookShelf';
 import Header from './header';
+import escapeRegExp from "escape-string-regexp";
+import sortBy from 'sort-by';
 import * as BooksAPI from './BooksAPI';
 import './App.css';
 
@@ -24,12 +26,19 @@ class BooksApp extends React.Component {
     ],
     showSearchPage: false,
     booksLoading: true,
+    query: '',
   }
 
-  updateShelf = (shelf, title) => {
+  updateShelf = (shelf, id) => {
     this.setState((state) => ({
-      books: state.books.map((book) => book.title === title ? Object.assign({}, book, { shelf }) : book),
+      books: state.books.map((book) => book.id === id ? Object.assign({}, book, { shelf }) : book),
     }));
+  }
+
+  updateQuery = (query) => {
+    this.setState({
+      query: query.trim(),
+    });
   }
 
   componentDidMount() {
@@ -40,6 +49,20 @@ class BooksApp extends React.Component {
   }
 
   render() {
+    let showBooks;
+    if (this.state.query) {
+      const match = new RegExp(escapeRegExp(this.state.query), "i");
+      const showByAuthorBooks = this.state.books
+        .filter(book => book.authors.map((author) => match.test(author)).find(boolValue => boolValue === true))
+        .sort(sortBy('title'));
+      const showByTitleBooks = this.state.books
+        .filter(book => match.test(book.title))
+        .sort(sortBy('title'));
+      showBooks = [...showByTitleBooks, ...showByAuthorBooks];
+    } else {
+      showBooks = this.state.books;
+    }
+
     return (
       <div className="app">
         {this.state.showSearchPage ? (
@@ -47,12 +70,17 @@ class BooksApp extends React.Component {
             <div className="search-books-bar">
               <a className="close-search" onClick={() => this.setState({ showSearchPage: false })}>Close</a>
               <div className="search-books-input-wrapper">
-                <input type="text" placeholder="Search by title or author"/>
+                <input
+                  type="text"
+                  value={this.state.query}
+                  onChange={(event) => this.updateQuery(event.target.value)}
+                  placeholder="Search by title or author"
+                />
               </div>
             </div>
             <div className="search-books-results">
               <ol className="books-grid">
-                {this.state.books && this.state.books
+                {showBooks && showBooks
                   .map((book, index) => (
                     <li key={index}>
                       <Book

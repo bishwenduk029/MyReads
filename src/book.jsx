@@ -11,7 +11,7 @@ class Book extends Component {
     this.setState({
       value: event.target.value,
     });
-    this.props.onShelfChange(event.target.value, this.props.title);
+    this.props.onShelfChange(event.target.value, this.props.id);
   }
 
   render() {
@@ -30,15 +30,21 @@ class Book extends Component {
           </div>
         </div>
         <div className="book-title">{this.props.title}</div>
-        <div className="book-authors">{this.props.author}</div>
+        {this.props.authors &&
+          this.props.authors
+            .map((author, index) =>
+              <div key={index} className="book-authors">{author}</div>
+            )
+        }
       </div>
     );
   }
 }
 
 Book.propTypes = {
+  id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  author: PropTypes.string.isRequired,
+  authors: PropTypes.array.isRequired,
   bookCover: PropTypes.string.isRequired,
   onShelfChange: PropTypes.func,
 };
