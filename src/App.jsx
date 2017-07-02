@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link, Route } from 'react-router-dom';
 import Book from './book';
 import BookShelf from './bookShelf';
 import Header from './header';
@@ -67,39 +68,7 @@ class BooksApp extends React.Component {
 
     return (
       <div className="app">
-        {this.state.showSearchPage ? (
-          <div className="search-books">
-            <div className="search-books-bar">
-              <a className="close-search" onClick={() => this.setState({ showSearchPage: false })}>Close</a>
-              <div className="search-books-input-wrapper">
-                <input
-                  type="text"
-                  value={this.state.query}
-                  onChange={(event) => this.updateQuery(event.target.value)}
-                  placeholder="Search by title or author"
-                />
-              </div>
-            </div>
-            <div className="search-books-results">
-              <ol className="books-grid">
-                {showBooks && showBooks
-                  .map((book, index) => (
-                    <li key={index}>
-                      <Book
-                        id={book.id}
-                        shelf={book.shelf}
-                        title={book.title}
-                        authors={book.authors}
-                        bookCover={book.imageLinks.thumbnail}
-                        onShelfChange={this.updateShelf}
-                      />
-                    </li>
-                  ))
-                }
-              </ol>
-            </div>
-          </div>
-        ) : (
+        <Route exact path='/' render={() => (
           <div className="list-books">
             <Header title='MyReads'/>
             <div className="list-books-content">
@@ -113,6 +82,7 @@ class BooksApp extends React.Component {
                     <ol className="books-grid">
                       {this.state.books && this.state.books
                         .filter((book) => book.shelf === shelf.id)
+                        .sort(sortBy('title'))
                         .map((book, index) => (
                           <li key={index}>
                             <Book
@@ -132,12 +102,48 @@ class BooksApp extends React.Component {
               </div>
             </div>
             <div className="open-search">
-              <a onClick={() => this.setState({ showSearchPage: true })}>Add a book</a>
+              <Link to='/search'>Add a book</Link>
             </div>
           </div>
         )}
+        />
+        <Route path="/search" render={() => (
+          <div className="search-books">
+            <div className="search-books-bar">
+              <Link className="close-search" to="/">Close</Link>
+              <div className="search-books-input-wrapper">
+                <input
+                  type="text"
+                  value={this.state.query}
+                  onChange={(event) => this.updateQuery(event.target.value)}
+                  placeholder="Search by title or author"
+                />
+              </div>
+            </div>
+            <div className="search-books-results">
+              <ol className="books-grid">
+                {showBooks && showBooks
+                  .sort(sortBy('title'))
+                  .map((book, index) => (
+                    <li key={index}>
+                      <Book
+                        id={book.id}
+                        shelf={book.shelf}
+                        title={book.title}
+                        authors={book.authors}
+                        bookCover={book.imageLinks.thumbnail}
+                        onShelfChange={this.updateShelf}
+                      />
+                    </li>
+                  ))
+                }
+              </ol>
+            </div>
+          </div>
+        )}
+        />
       </div>
-    )
+    );
   }
 }
 
