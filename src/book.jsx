@@ -11,7 +11,7 @@ class Book extends Component {
     this.setState({
       value: event.target.value,
     });
-    this.props.onShelfChange(event.target.value, this.props.id);
+    this.props.onShelfChange(event.target.value);
   }
 
   render() {
