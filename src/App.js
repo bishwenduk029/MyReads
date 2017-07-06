@@ -20,10 +20,13 @@ class BooksApp extends React.Component {
   }
 
   insertNewBook = (book, shelf) => {
-    BooksAPI.update(book, shelf);
-    this.setState(prevState => ({
-      books: [...prevState.books, book],
-    }))
+    console.log(shelf);
+    BooksAPI.update(book, shelf).then(resp =>
+      BooksAPI.get(book.id)
+        .then(book => this.setState(prevState => ({
+          books: [...prevState.books, book],
+        })))
+    );
   }
 
   updateShelf = (bookToUpdate, shelf) => {
