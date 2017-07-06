@@ -15,15 +15,12 @@ class ListSearchBooks extends Component {
     books: [],
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    if (nextState.books.hasOwnProperty('error')) {
-      return false;
-    }
-    return true;
-  }
-
   updateBooksList = (books) => {
-    this.setState({ books });
+    if (books.hasOwnProperty('error')) {
+      this.setState({ books: []});
+    } else {
+      this.setState({ books });
+    }
   }
 
   render() {

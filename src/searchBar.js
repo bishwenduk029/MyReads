@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-import { search as Search } from './BooksAPI';
+import { search } from './BooksAPI';
 
 const maxResults = 20;
 
@@ -15,10 +15,18 @@ class SearchBar extends React.Component {
     query: '',
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextState.query === this.state.query) {
+      return false;
+    }
+    return true;
+  }
+
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.query.length !== 0 && prevState.query !== this.state.query) {
-      Search(prevState.query, maxResults)
-        .then(books => this.props.onNewBookList(books));
+    if (prevState.query.length !== 0 ) {
+      console.log(prevState.query);
+      search(prevState.query, maxResults)
+        .then(books => {console.log(books);this.props.onNewBookList(books)});
     }
   }
 
