@@ -1,6 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+const propTypes = {
+  id: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  authors: PropTypes.array,
+  bookCover: PropTypes.string,
+  onShelfChange: PropTypes.func,
+};
+
 class Book extends Component {
 
   state = {
@@ -41,12 +49,6 @@ class Book extends Component {
   }
 }
 
-Book.propTypes = {
-  id: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  authors: PropTypes.array.isRequired,
-  bookCover: PropTypes.string.isRequired,
-  onShelfChange: PropTypes.func,
-};
+Book.propTypes = propTypes;
 
 export default Book;
