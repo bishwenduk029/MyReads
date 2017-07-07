@@ -19,21 +19,16 @@ class BooksApp extends React.Component {
       });
   }
 
-  insertNewBook = (book, shelf) => {
-    BooksAPI.update(book, shelf)
-      .then(resp =>
-        BooksAPI.get(book.id)
-          .then(book => this.setState(prevState => ({
-            books: [...prevState.books, book],
-          })))
-    );
-  }
-
   updateShelf = (bookToUpdate, shelf) => {
-    this.setState((prevState) => ({
-      books: prevState.books.map(book => book.id === bookToUpdate.id ? Object.assign({}, book, { shelf }) : book),
-    }));
-    BooksAPI.update(bookToUpdate, shelf);
+    if(bookToUpdate.shelf !== shelf) {
+      BooksAPI.update(bookToUpdate, shelf)
+        .then(() => {
+          bookToUpdate.shelf = shelf;
+          this.setState(state => ({
+            books: state.books.filter(book => book.id !== bookToUpdate.id).concat([ bookToUpdate ]),
+          }))
+        });
+    }
   }
 
   render() {
@@ -50,7 +45,7 @@ class BooksApp extends React.Component {
         <Route path="/search" render={() => (
           <ListSearchBooks
             books={this.state.books}
-            changeShelf={this.insertNewBook}
+            changeShelf={this.updateShelf}
           />
         )}
         />

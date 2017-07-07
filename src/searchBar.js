@@ -24,9 +24,8 @@ class SearchBar extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.query.length !== 0 ) {
-      console.log(prevState.query);
       search(prevState.query, maxResults)
-        .then(books => {console.log(books);this.props.onNewBookList(books)});
+        .then(books => this.props.onNewBookList(books));
     }
   }
 
