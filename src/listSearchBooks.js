@@ -43,12 +43,11 @@ class ListSearchBooks extends Component {
               .map((book, index) => (
                 <li key={index}>
                   <Book
-                    id={book.id}
-                    shelf={book.shelf}
+                    book={book}
                     title={book.title}
                     authors={book.authors}
                     bookCover={book.imageLinks ? book.imageLinks.thumbnail : null}
-                    onShelfChange={(shelf) => this.props.changeShelf(book, shelf)}
+                    onShelfChange={this.props.changeShelf}
                   />
                 </li>
               ))

@@ -39,12 +39,11 @@ function ListBooks({ books, changeShelf, loading }) {
                   .map((book, index) => (
                     <li key={index}>
                       <Book
-                        id={book.id}
-                        shelf={book.shelf}
+                        book={book}
                         title={book.title}
                         authors={book.authors}
                         bookCover={book.imageLinks.thumbnail}
-                        onShelfChange={(shelf) => changeShelf(book, shelf)}
+                        onShelfChange={changeShelf}
                       />
                     </li>
                   ))
