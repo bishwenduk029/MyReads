@@ -40,9 +40,6 @@ function ListBooks({ books, changeShelf, loading }) {
                     <li key={index}>
                       <Book
                         book={book}
-                        title={book.title}
-                        authors={book.authors}
-                        bookCover={book.imageLinks.thumbnail}
                         onShelfChange={changeShelf}
                       />
                     </li>

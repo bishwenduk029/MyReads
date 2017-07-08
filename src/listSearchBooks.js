@@ -44,8 +44,6 @@ class ListSearchBooks extends Component {
                 <li key={index}>
                   <Book
                     book={book}
-                    title={book.title}
-                    authors={book.authors}
                     bookCover={book.imageLinks ? book.imageLinks.thumbnail : null}
                     onShelfChange={this.props.changeShelf}
                   />
