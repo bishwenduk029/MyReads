@@ -19,11 +19,20 @@ class ListSearchBooks extends Component {
     if (books.hasOwnProperty('error')) {
       this.setState({ books: []});
     } else {
-      this.setState({ books });
+      this.checkAndUpdateShelf(books);
     }
   }
 
+  checkAndUpdateShelf = (books) => {
+    this.setState({
+      books: books.map(book => {
+        return this.props.books.find(userBook => userBook.id === book.id) || book;
+      }),
+    });
+  }
+
   render() {
+
     return (
       <div className="search-books">
         <SearchBar onNewBookList={this.updateBooksList} />
